@@ -19,8 +19,8 @@ void DiscStorage::ensureDirectoryExists() const {
 }
 
 
-std::filesystem::path DiscStorage::makeFilePath(const Key& key) const {
-    std::string key_s = key.key();
+std::filesystem::path DiscStorage::makeFilePath(const Key& key) {
+    std::string key_s = std::string(key.key());
     const std::string invalid_chars = "<>:\"/\\|?*!";
     
     std::replace_if(key_s.begin(), key_s.end(),
@@ -33,6 +33,9 @@ std::filesystem::path DiscStorage::makeFilePath(const Key& key) const {
 }
 
 void DiscStorage::set(const Key& key, const Value& value) {
+
+
+	std::cout << "Try key " << key.key() << std::endl;
     const auto file_path = makeFilePath(key);
     
     std::ofstream file(file_path, std::ios::binary | std::ios::trunc);
@@ -47,7 +50,7 @@ void DiscStorage::set(const Key& key, const Value& value) {
 }
 
 std::optional<Value> DiscStorage::get(const Key& key) {
-    const auto file_path = makeFilePath(key);
+    auto file_path = makeFilePath(key);
     
     if (!std::filesystem::exists(file_path)) {
         return std::nullopt;
@@ -68,11 +71,11 @@ std::optional<Value> DiscStorage::get(const Key& key) {
         throw StorageException("Failed to read value from file");
     }
     
-    return Value(std::string_view(buffer));
+    return Value(buffer);
 }
 
 void DiscStorage::del(const Key& key) {
-    const auto file_path = makeFilePath(key);
+    auto file_path = makeFilePath(key);
     
     if (std::filesystem::exists(file_path)) {
         if (!std::filesystem::remove(file_path)) {

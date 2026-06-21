@@ -2,6 +2,7 @@
 #include <string>
 #include <SFML/Network.hpp>
 #include "Client.hpp"
+#include "ParsingUtils.hpp"
 
 int main() {
 	Client client;
@@ -16,7 +17,13 @@ int main() {
 	std::string resp = client.sendCommand(cmd);
 	std::cout << resp << std::endl;
 
-	
+	cmd = Command::setCommand(Key("key2"), Value("Value"));
+	resp = client.sendCommand(cmd);
+	std::cout << resp << std::endl;
+
+	cmd = Command::getCommand(Key("key"));
+	resp = client.sendCommand(cmd);
+	std::cout << resp << std::endl;
 	client.disconnect();
 	
 	

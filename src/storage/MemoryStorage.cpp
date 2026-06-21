@@ -9,7 +9,7 @@ void MemoryStorage::del(const Key& key) {
 	if (m_storage.find(key) != m_storage.end()) {
 		m_storage.erase(key);
 	}
-	throw StorageException("Storage error: No key in storage");
+	throw StorageException("No key in storage");
 }
 
 std::optional<Value> MemoryStorage::get(const Key& key) {

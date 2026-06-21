@@ -6,9 +6,10 @@
 
 class DiscStorage final : public IStorage {
 private:
-	const std::string& m_directory_path;
+	// const std::filesystem::path& m_directory_path 
+	std::filesystem::path m_directory_path;
 
-	[[nodiscard]] std::filesystem::path makeFilePath(const Key& key) const;
+	[[nodiscard]] std::filesystem::path makeFilePath(const Key& key);
 	void ensureDirectoryExists() const;
 public:
 	explicit DiscStorage(const std::filesystem::path& directory_path);

@@ -3,7 +3,7 @@
 #include "GetHandler.hpp"
 #include "DelHandler.hpp"
 #include <iostream>
-//500ДЕНЬ
+
 Server::Server(std::unique_ptr<IStorage> storage) : m_storage(std::move(storage)) {
 	m_dispatcher.addHandler(std::make_unique<SetHandler>());
 	m_dispatcher.addHandler(std::make_unique<GetHandler>());
@@ -18,7 +18,7 @@ void Server::start(uint16_t port) {
 }
 
 void Server::launch() {
-    std::cout << "Waiting for clients..." << std::endl;
+    std::cout << "Waiting for clients" << std::endl;
     
     while (true) {
         sf::TcpSocket client;
@@ -27,37 +27,56 @@ void Server::launch() {
             std::cerr << "Accept failed" << std::endl;
             continue;
         }
-        
+
+        std::cout << "Client connected" << std::endl;
         handleClient(client);
+        std::cout << "Client disconnected" << std::endl;
     }
 }
 
 void Server::handleClient(sf::TcpSocket& client) {
-    std::cout << "Client connected" << std::endl;
-    
-    sf::Packet packet;
-    if (client.receive(packet) != sf::Socket::Done) {
-        std::cerr << "Receive failed" << std::endl;
-        return;
+    while (true) {
+        sf::Packet packet;
+        const sf::Socket::Status status = client.receive(packet);
+        
+        if (status == sf::Socket::Disconnected) {
+            break;
+        }
+        
+        if (status != sf::Socket::Done) {
+            continue;
+        }
+        
+        if (packet.getDataSize() == 0) {
+            continue;
+        }
+        
+        Command command;
+        
+        if (!(packet >> command)) {
+            sf::Packet error_packet;
+            error_packet << "ERROR: Invalid command format";
+            client.send(error_packet);
+            continue;
+        }
+        
+        if (command.commandName() == CommandName::UNKNOWN) {
+            sf::Packet error_packet;
+            error_packet << "ERROR: Invalid command";
+            client.send(error_packet);
+            continue;
+        }
+        
+        std::string response = m_dispatcher.execute(command, *m_storage);
+        
+        sf::Packet response_packet;
+        response_packet << response;
+        
+        if (client.send(response_packet) != sf::Socket::Done) {
+            std::cout << "Failed to send response, client disconnected" << std::endl;
+            break;
+        }
     }
-    
-    Command command;
-    packet >> command;
-    
-    if (command.commandName() == CommandName::UNKNOWN) {
-        sf::Packet error_packet;
-        error_packet << "ERROR: Invalid command";
-        client.send(error_packet);
-        return;
-    }
-    
-    std::string response = m_dispatcher.execute(command, *m_storage);
-    
-    sf::Packet response_packet;
-    response_packet << response;
-    client.send(response_packet);
-    
-    std::cout << "Client disconnected" << std::endl;
 }
 
 void Server::stop() {
