@@ -1,7 +1,5 @@
 #core/CMakeLists.txt
 add_library(core STATIC
-	Core.cpp
-	ClientId.cpp
 	Key.cpp
 	Value.cpp
 	Command.cpp)

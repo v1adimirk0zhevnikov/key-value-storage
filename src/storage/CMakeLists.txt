@@ -2,8 +2,7 @@
 add_library(storage STATIC
 	IStorage.hpp
 	DiscStorage.cpp
-	MemoryStorage.cpp
-	StorageException.cpp)
+	MemoryStorage.cpp)
 
 target_include_directories(storage PUBLIC $<BUILD_INTERFACE:${CMAKE_CURRENT_SOURCE_DIR}>)
 
