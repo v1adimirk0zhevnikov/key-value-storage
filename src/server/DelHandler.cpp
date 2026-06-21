@@ -7,16 +7,14 @@ CommandName DelHandler::getCommandName() const {
 }
 
 std::string DelHandler::executeCommand(const Command& command, IStorage& storage) {
-	if (command.commandName() != CommandName::DEL) {
-		throw std::runtime_error(""); // TODO: custom exception
-	}
-
 	const Key& key = command.key();
 
 	try{
 		storage.del(key);
 		return "DELETED SUCCESFUL";
 	} catch (const StorageException&) {
-		return "NOT FOUND KEY";
+		return "NOT FOUND";
+	} catch (const std::runtime_error&) {
+		return "FAILED TO DELETE";
 	}
 };

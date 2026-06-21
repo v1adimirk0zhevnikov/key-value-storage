@@ -33,9 +33,6 @@ std::filesystem::path DiscStorage::makeFilePath(const Key& key) {
 }
 
 void DiscStorage::set(const Key& key, const Value& value) {
-
-
-	std::cout << "Try key " << key.key() << std::endl;
     const auto file_path = makeFilePath(key);
     
     std::ofstream file(file_path, std::ios::binary | std::ios::trunc);
@@ -45,7 +42,7 @@ void DiscStorage::set(const Key& key, const Value& value) {
     
     file.write(value.value().data(), value.value().size());
     if (!file.good()) {
-        throw StorageException("Failed to write value to file");
+        throw StorageException("FAILED to write value to file");
     }
 }
 
@@ -58,7 +55,7 @@ std::optional<Value> DiscStorage::get(const Key& key) {
     
     std::ifstream file(file_path, std::ios::binary | std::ios::ate);
     if (!file.is_open()) {
-        throw StorageException("Cannot open file for reading");
+        throw StorageException("FAILED to open file for reading");
     }
     
     const auto file_size = static_cast<size_t>(file.tellg());
@@ -68,7 +65,7 @@ std::optional<Value> DiscStorage::get(const Key& key) {
     file.read(buffer.data(), file_size);
     
     if (!file.good() && !file.eof()) {
-        throw StorageException("Failed to read value from file");
+        throw StorageException("FAILED to read value from file");
     }
     
     return Value(buffer);
@@ -79,7 +76,8 @@ void DiscStorage::del(const Key& key) {
     
     if (std::filesystem::exists(file_path)) {
         if (!std::filesystem::remove(file_path)) {
-            throw StorageException("Failed to delete file");
+            throw std::runtime_error("FAILED to remove");
         }
     }
+    throw StorageException("NOT FOUND KEY");
 }

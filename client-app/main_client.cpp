@@ -9,23 +9,40 @@ int main() {
 
 	client.connect("127.0.0.1", 8888);
 	if (!client.isConnected()) {
-		std::cout << "Cannot connect, change port or host" << std::endl;
+		std::cout << "[CLIENT] Cannot connect, change port or host" << std::endl;
 		return 1;
 	}
 
-	Command cmd = Command::setCommand(Key("key"), Value("value"));
-	std::string resp = client.sendCommand(cmd);
-	std::cout << resp << std::endl;
+	std::cout << "Connected to server. \"quit\" or \"exit\" to exit):\n";
+	std::cout << "Examples:\n";
+	std::cout << "[CLIENT] > SET;key;value\n";
+	std::cout << "[CLIENT] > GET;key\n";
+	std::cout << "[CLIENT] > DEL;key\n\n";
 
-	cmd = Command::setCommand(Key("key2"), Value("Value"));
-	resp = client.sendCommand(cmd);
-	std::cout << resp << std::endl;
+	std::string input_line;
+	while (std::getline(std::cin, input_line)) {
+		if (input_line.empty()) {
+			continue;
+		}
+		if (input_line == "quit" || input_line == "exit") {
+			break;
+		}
 
-	cmd = Command::getCommand(Key("key"));
-	resp = client.sendCommand(cmd);
-	std::cout << resp << std::endl;
+		try {
+			Command cmd = parsing::commandFromLine(input_line);
+			std::string resp = client.sendCommand(cmd);
+			std::cout << "[SERVER] > " << resp << std::endl;
+		
+
+		} catch (const std::invalid_argument& e) {
+			std::cout << "[CLIENT]" << e.what() << std::endl;
+		}
+
+		std::cout << "[CLIENT] > ";
+	}
+
 	client.disconnect();
-	
+	std::cout << "Disconnected.\n";
 	
 	return 0;
 }
