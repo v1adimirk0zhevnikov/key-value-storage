@@ -1,9 +1,7 @@
 #tests/CMakeLists.txt
 add_executable(tests
-	test.cpp
-	typesTest/testClientId.cpp
-	typesTest/testCommand.cpp
-	protocolTest/testParsing.cpp
+	testCommand.cpp
+	testParsing.cpp
 )
 
 target_link_libraries(tests PRIVATE
