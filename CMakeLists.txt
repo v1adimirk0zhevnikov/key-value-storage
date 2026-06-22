@@ -19,7 +19,7 @@ FetchContent_MakeAvailable(googletest)
 set_target_properties(gtest gtest_main gmock gmock_main
 	PROPERTIES FOLDER "external")
 
-find_package(SFML 2.5 COMPONENTS system window graphics network audio REQUIRED)
+find_package(SFML 2.5 COMPONENTS network REQUIRED)
 
 
 add_subdirectory(src/core)

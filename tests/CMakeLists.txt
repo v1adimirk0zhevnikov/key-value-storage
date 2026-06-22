@@ -8,7 +8,6 @@ target_link_libraries(tests PRIVATE
 	core
 	GTest::gtest_main
 	protocol
-	sfml-system
 	sfml-network
 	)
 
