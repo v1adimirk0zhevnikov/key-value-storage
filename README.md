@@ -7,22 +7,18 @@
 
 # Структура
 **server-app/** - Пример использования сервера
-
 **client-app/** - Пример использования клиента
-
 **src/** - Реализация
 
 # Как собрать?
-mkdir build && cd build
-
-cmake ..
-
-make
+mkdir build && cd build  
+cmake ..  
+make  
 
 # Как запустить?
 
--Сервер:
+-Сервер:  
 ./server-app/server_app
 
--Клиент:
+-Клиент:  
 ./client-app/client_app
