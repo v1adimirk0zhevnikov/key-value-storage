@@ -22,3 +22,6 @@ make
 
 -Клиент:  
 ./client-app/client_app
+
+  
+(Постановка задачи описана в task.md)
