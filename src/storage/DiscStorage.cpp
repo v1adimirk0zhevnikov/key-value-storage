@@ -37,7 +37,7 @@ void DiscStorage::set(const Key& key, const Value& value) {
     
     std::ofstream file(file_path, std::ios::binary | std::ios::trunc);
     if (!file.is_open()) {
-        throw StorageException("Cannot open file for writing");
+        throw StorageException("FAILED to open file for writing");
     }
     
     file.write(value.value().data(), value.value().size());
