@@ -73,11 +73,12 @@ std::optional<Value> DiscStorage::get(const Key& key) {
 
 void DiscStorage::del(const Key& key) {
     auto file_path = makeFilePath(key);
-    
-    if (std::filesystem::exists(file_path)) {
-        if (!std::filesystem::remove(file_path)) {
-            throw std::runtime_error("FAILED to remove");
-        }
+
+    if(!std::filesystem::exists(file_path)) {
+    	throw StorageException("NOT FOUND");
     }
-    throw StorageException("NOT FOUND KEY");
+
+    if(!std::filesystem::remove(file_path)) {
+    	throw std::runtime_error("FAILED to remove");
+    }
 }

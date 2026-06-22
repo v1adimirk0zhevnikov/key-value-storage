@@ -6,7 +6,7 @@
 #include "ProtocolException.hpp"
 #include "Client.hpp"
 #include "ParsingUtils.hpp"
-
+/*
 int main() {
 	Client client;
 
@@ -49,7 +49,7 @@ int main() {
 	
 	return 0;
 }
-/*
+*/
 int main(int argc, char* argv[]) {
 	Client client;
     client.connect("127.0.0.1", 8888);
@@ -83,7 +83,7 @@ int main(int argc, char* argv[]) {
 			std::cout << "[CLIENT] > ";
  			std::optional<Command> command = reader->next();
 	
-	        if (!command_opt.has_value()) {
+	        if (!command.has_value()) {
 	        	break; 
 	        }
 	        std::string resp = client.sendCommand(command.value());
@@ -101,4 +101,4 @@ int main(int argc, char* argv[]) {
 	std::cout << "[CLIENT] > Disconnected.\n";
 
 	return 0;
-}*/
+}
