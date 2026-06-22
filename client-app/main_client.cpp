@@ -12,12 +12,12 @@ int main() {
 
 	client.connect("127.0.0.1", 8888);
 	if (!client.isConnected()) {
-		std::cout << "[CLIENT] Cannot connect, change port or host" << std::endl;
+		std::cout << "[CLIENT] > Cannot connect, change port or host" << std::endl;
 		return 1;
 	}
 
-	std::cout << "Connected to server. \"quit\" or \"exit\" to exit):\n";
-	std::cout << "Examples:\n";
+	std::cout << "[CLIENT] > Connected to server. \"quit\" or \"exit\" to exit):\n";
+	std::cout << "[CLIENT] > Examples:\n";
 	std::cout << "[CLIENT] > SET;key;value\n";
 	std::cout << "[CLIENT] > GET;key\n";
 	std::cout << "[CLIENT] > DEL;key\n\n";
@@ -39,7 +39,7 @@ int main() {
 		
 
 		} catch (const std::invalid_argument& e) {
-			std::cout << "[CLIENT]" << e.what() << std::endl;
+			std::cout << "[CLIENT] > " << e.what() << std::endl;
 		}
 		std::cout << "[CLIENT] > ";
 	}
